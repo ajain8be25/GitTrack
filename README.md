@@ -1,4 +1,4 @@
-# 🃏 GitTrack
+# 🃏 Builder Card
 
 Type a GitHub username and get a collectible, trading-card style profile: top repos, main languages and recent activity.
 
@@ -59,3 +59,19 @@ All three calls run in parallel using the public, unauthenticated GitHub REST AP
 ## Tech stack
 
 HTML5 · CSS3 · JavaScript (ES2020) · React 18 (UMD) · Babel Standalone · GitHub REST API · Google Fonts (Space Mono, Bowlby One)
+
+## Project structure
+
+```
+builder-card/
+├── index.html          # page shell, loads React + scripts
+├── css/
+│   └── style.css       # all styling
+├── js/
+│   ├── utils.js        # helpers + GitHub API fetching
+│   ├── components.js   # React components (Card, RepoTile, ...)
+│   └── app.js          # root App component + render
+└── README.md
+```
+
+Open `index.html` directly in your browser. The React code uses `React.createElement`, so no build step or local server is needed.
