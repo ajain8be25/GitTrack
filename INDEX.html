@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Builder Card</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🃏</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bowlby+One&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+<style>
+:root{--paper:#f4ecd8;--ink:#141414;--hot:#ff4d2e;--sky:#2e6bff;--lemon:#ffd84a;--mint:#42d6a4}
+*{box-sizing:border-box;margin:0}
+body{min-height:100vh;background:var(--paper);color:var(--ink);font-family:'Space Mono',monospace;
+  background-image:radial-gradient(var(--ink) 1px,transparent 1.4px);background-size:14px 14px;background-position:0 0;
+  padding:32px 16px 64px}
+body::before{content:"";position:fixed;inset:0;background:var(--paper);opacity:.9;z-index:-1}
+.wrap{max-width:980px;margin:0 auto}
+h1{font-family:'Bowlby One',Impact,sans-serif;font-size:clamp(40px,9vw,92px);line-height:.9;text-transform:uppercase;letter-spacing:-1px}
+h1 span{display:inline-block;background:var(--hot);color:var(--paper);padding:0 .15em;transform:rotate(-2deg);border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink)}
+.sub{margin:18px 0 26px;font-weight:700;max-width:520px}
+form{display:flex;gap:0;max-width:560px;border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);background:#fff}
+.at{background:var(--lemon);padding:14px 16px;font-weight:700;font-size:20px;border-right:4px solid var(--ink)}
+input{flex:1;min-width:0;border:0;outline:0;font:700 18px 'Space Mono',monospace;padding:0 14px;background:transparent}
+button{border:0;border-left:4px solid var(--ink);background:var(--sky);color:#fff;font:700 16px 'Space Mono',monospace;padding:0 22px;cursor:pointer;text-transform:uppercase}
+button:hover{background:var(--hot)}button:active{transform:translate(2px,2px)}
+.err{margin-top:22px;display:inline-block;background:var(--hot);color:#fff;border:4px solid var(--ink);padding:10px 14px;font-weight:700;box-shadow:5px 5px 0 var(--ink)}
+.stage{margin-top:44px;perspective:1200px}
+.card{display:grid;grid-template-columns:300px 1fr;border:5px solid var(--ink);background:#fff;box-shadow:14px 14px 0 var(--ink);transition:transform .15s ease-out;transform-style:preserve-3d;animation:drop .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes drop{from{opacity:0;transform:translateY(-40px) rotate(-4deg)}}
+.left{background:var(--lemon);border-right:5px solid var(--ink);padding:22px;position:relative;overflow:hidden}
+.left::after{content:"";position:absolute;right:-60px;bottom:-60px;width:180px;height:180px;border-radius:50%;background:var(--mint);border:5px solid var(--ink);z-index:0}
+.left>*{position:relative;z-index:1}
+.avatar{width:100%;aspect-ratio:1;object-fit:cover;border:5px solid var(--ink);filter:contrast(1.1) saturate(1.2);background:#fff}
+.name{font-family:'Bowlby One',sans-serif;font-size:28px;margin-top:16px;line-height:1;word-break:break-word}
+.handle{font-weight:700;margin-top:6px}
+.bio{margin-top:10px;font-size:13px;line-height:1.4}
+.class{display:inline-block;margin-top:14px;background:var(--ink);color:var(--lemon);padding:5px 10px;font-weight:700;font-size:12px;text-transform:uppercase;transform:rotate(-2deg)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:18px;border:4px solid var(--ink);background:#fff}
+.stats div{padding:8px 4px;text-align:center;border-right:4px solid var(--ink)}.stats div:last-child{border:0}
+.stats b{display:block;font-family:'Bowlby One',sans-serif;font-size:20px}.stats small{font-size:10px;text-transform:uppercase;font-weight:700}
+.right{padding:22px 26px;display:flex;flex-direction:column;gap:26px;min-width:0}
+h2{font-family:'Bowlby One',sans-serif;font-size:18px;text-transform:uppercase;display:inline-block;background:var(--ink);color:var(--paper);padding:3px 10px;margin-bottom:12px}
+.langbar{display:flex;height:42px;border:4px solid var(--ink)}
+.langbar i{display:block;border-right:3px solid var(--ink);transition:flex .6s}.langbar i:last-child{border:0}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:13px;font-weight:700}
+.legend span::before{content:"";display:inline-block;width:12px;height:12px;border:2px solid var(--ink);margin-right:6px;background:var(--c)}
+.repos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.repo{display:block;text-decoration:none;color:inherit;border:4px solid var(--ink);padding:12px;background:var(--bg);box-shadow:5px 5px 0 var(--ink);transition:transform .1s,box-shadow .1s;min-width:0}
+.repo:hover{transform:translate(-3px,-3px) rotate(-.6deg);box-shadow:9px 9px 0 var(--ink)}
+.repo b{display:block;font-size:15px;word-break:break-word}
+.repo p{font-size:12px;margin:6px 0 10px;line-height:1.35;min-height:32px}
+.repo .m{display:flex;gap:10px;font-size:12px;font-weight:700;flex-wrap:wrap}
+.tape{border:4px solid var(--ink);background:var(--paper);position:relative}
+.tape li{list-style:none;display:flex;gap:10px;padding:8px 12px;font-size:13px;border-bottom:3px dashed var(--ink);align-items:baseline}
+.tape li:last-child{border:0}
+.tag{flex:none;background:var(--c);border:2px solid var(--ink);padding:0 6px;font-size:11px;font-weight:700;text-transform:uppercase}
+.tape .t{margin-left:auto;flex:none;font-size:11px;opacity:.7}
+.tape .x{min-width:0;word-break:break-word}
+.foot{margin-top:34px;font-size:12px;font-weight:700}
+@media(max-width:760px){.card{grid-template-columns:1fr}.left{border-right:0;border-bottom:5px solid var(--ink)}.repos{grid-template-columns:1fr}form{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useRef } = React;
+const LANG = {JavaScript:'#ffd84a',TypeScript:'#2e6bff',Python:'#42d6a4',Go:'#5fd4ff',Rust:'#ff8a3d',Java:'#ff4d2e',HTML:'#ff6fae',CSS:'#a77bff',C:'#9aa0a6','C++':'#e0457b','C#':'#6bbf59',Ruby:'#d62f4a',PHP:'#8892bf',Swift:'#ff7a45',Kotlin:'#b36bff',Shell:'#7ed957',Jupyter:'#ff9d4a','Jupyter Notebook':'#ff9d4a',Dart:'#3ec7e0'};
+const FALL = ['#ffd84a','#2e6bff','#42d6a4','#ff4d2e','#ff6fae','#a77bff'];
+const colorOf=(l,i)=>LANG[l]||FALL[i%FALL.length];
+const BG=['#fff3b8','#cfe0ff','#c8f5e4','#ffd0c6'];
+
+function ago(d){const s=(Date.now()-new Date(d))/1000;
+  if(s<3600)return Math.max(1,Math.floor(s/60))+'m ago';
+  if(s<86400)return Math.floor(s/3600)+'h ago';
+  if(s<2592000)return Math.floor(s/86400)+'d ago';
+  return Math.floor(s/2592000)+'mo ago';}
+
+function describe(e){
+  const r=e.repo.name.split('/')[1]||e.repo.name, p=e.payload;
+  switch(e.type){
+    case 'PushEvent':{const n=p.size||(p.commits||[]).length||1;return ['PUSH',  '#42d6a4', `${n} commit${n>1?'s':''} → ${r}`];}
+    case 'PullRequestEvent':return ['PR','#2e6bff',`${p.action} PR #${p.number} in ${r}`];
+    case 'IssuesEvent':return ['ISSUE','#ff4d2e',`${p.action} issue in ${r}`];
+    case 'IssueCommentEvent':return ['TALK','#ffd84a',`commented on ${r}`];
+    case 'WatchEvent':return ['STAR','#ffd84a',`starred ${r}`];
+    case 'ForkEvent':return ['FORK','#a77bff',`forked ${r}`];
+    case 'CreateEvent':return ['NEW','#ff6fae',`created ${p.ref_type} in ${r}`];
+    case 'ReleaseEvent':return ['SHIP','#42d6a4',`released in ${r}`];
+    default:return [e.type.replace('Event','').toUpperCase().slice(0,6),'#fff',`activity in ${r}`];}
+}
+
+function builderClass(langs,stars,followers){
+  const top=langs[0]?.name;
+  const rank=stars>1000?'Legend':stars>100?'Veteran':stars>10?'Maker':'Rookie';
+  return `${rank} · ${top?top+' Wrangler':'Code Wanderer'}${followers>500?' ★':''}`;
+}
+
+function Card({data}){
+  const ref=useRef();
+  const {user,repos,langs,events}=data;
+  const stars=repos.reduce((a,r)=>a+r.stargazers_count,0);
+  const tilt=e=>{const b=ref.current.getBoundingClientRect();
+    const x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;
+    ref.current.style.transform=`rotateY(${x*6}deg) rotateX(${-y*6}deg)`;};
+  const reset=()=>ref.current.style.transform='';
+  const top=[...repos].filter(r=>!r.fork).sort((a,b)=>b.stargazers_count-a.stargazers_count).slice(0,4);
+  return (
+    <div className="stage"><div className="card" ref={ref} onMouseMove={tilt} onMouseLeave={reset}>
+      <div className="left">
+        <img className="avatar" src={user.avatar_url} alt=""/>
+        <div className="name">{user.name||user.login}</div>
+        <div className="handle">@{user.login}</div>
+        {user.bio&&<div className="bio">{user.bio}</div>}
+        <div className="class">{builderClass(langs,stars,user.followers)}</div>
+        <div className="stats">
+          <div><b>{user.public_repos}</b><small>repos</small></div>
+          <div><b>{stars}</b><small>stars</small></div>
+          <div><b>{user.followers}</b><small>fans</small></div>
+        </div>
+      </div>
+      <div className="right">
+        <section>
+          <h2>Main languages</h2>
+          {langs.length?<>
+            <div className="langbar">{langs.map((l,i)=><i key={l.name} style={{flex:l.pct,background:colorOf(l.name,i)}} title={l.name}/>)}</div>
+            <div className="legend">{langs.map((l,i)=><span key={l.name} style={{'--c':colorOf(l.name,i)}}>{l.name} {Math.round(l.pct)}%</span>)}</div>
+          </>:<div className="legend">No language data yet.</div>}
+        </section>
+        <section>
+          <h2>Top repos</h2>
+          <div className="repos">{top.length?top.map((r,i)=>
+            <a className="repo" key={r.id} href={r.html_url} target="_blank" rel="noreferrer" style={{'--bg':BG[i%4]}}>
+              <b>{r.name}</b><p>{(r.description||'No description. Mystery project.').slice(0,90)}</p>
+              <div className="m"><span>★ {r.stargazers_count}</span><span>⑂ {r.forks_count}</span>{r.language&&<span>{r.language}</span>}</div>
+            </a>):<div className="legend">No original repos found.</div>}</div>
+        </section>
+        <section>
+          <h2>Recent activity</h2>
+          <ul className="tape" style={{padding:0}}>{events.length?events.map(e=>{const [t,c,x]=describe(e);
+            return <li key={e.id}><span className="tag" style={{'--c':c,background:c}}>{t}</span><span className="x">{x}</span><span className="t">{ago(e.created_at)}</span></li>}):
+            <li>No public activity lately.</li>}</ul>
+        </section>
+      </div>
+    </div></div>);
+}
+
+function App(){
+  const [name,setName]=useState('');
+  const [state,setState]=useState({s:'idle'});
+  async function go(e){
+    e.preventDefault();
+    const u=name.trim().replace(/^@/,'');
+    if(!u)return;
+    setState({s:'load'});
+    try{
+      const get=async p=>{const r=await fetch('https://api.github.com/'+p);
+        if(r.status===404)throw new Error(`No builder named "${u}".`);
+        if(r.status===403)throw new Error('GitHub rate limit hit. Try again in a bit.');
+        if(!r.ok)throw new Error('GitHub said: '+r.status);return r.json();};
+      const [user,repos,events]=await Promise.all([
+        get(`users/${u}`),get(`users/${u}/repos?per_page=100&sort=pushed`),get(`users/${u}/events/public?per_page=8`)]);
+      const tally={};
+      repos.filter(r=>!r.fork&&r.language).forEach(r=>{tally[r.language]=(tally[r.language]||0)+Math.sqrt(r.size+1)+r.stargazers_count;});
+      const sum=Object.values(tally).reduce((a,b)=>a+b,0)||1;
+      const langs=Object.entries(tally).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([n,v])=>({name:n,pct:v/sum*100}));
+      setState({s:'ok',data:{user,repos,langs,events}});
+    }catch(err){setState({s:'err',msg:err.message==='Failed to fetch'?'Network error. Are you online?':err.message});}
+  }
+  return (
+    <div className="wrap">
+      <h1>Builder<br/><span>Card</span></h1>
+      <p className="sub">Type a GitHub handle. Get a collectible card of what they build.</p>
+      <form onSubmit={go}>
+        <div className="at">@</div>
+        <input value={name} onChange={e=>setName(e.target.value)} placeholder="torvalds" autoFocus aria-label="GitHub username"/>
+        <button type="submit">{state.s==='load'?'…':'Deal'}</button>
+      </form>
+      {state.s==='err'&&<div className="err">✖ {state.msg}</div>}
+      {state.s==='ok'&&<Card key={state.data.user.login} data={state.data}/>}
+      <div className="foot">Data: public GitHub API · languages weighted by repo size + stars</div>
+    </div>);
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
