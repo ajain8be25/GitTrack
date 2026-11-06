@@ -6,26 +6,28 @@
 <title>Builder Card</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🃏</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Bowlby+One&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
 <style>
 :root{--paper:#f4ecd8;--ink:#141414;--hot:#ff4d2e;--sky:#2e6bff;--lemon:#ffd84a;--mint:#42d6a4}
 *{box-sizing:border-box;margin:0}
 body{min-height:100vh;background:var(--paper);color:var(--ink);font-family:'Space Mono',monospace;
-  background-image:radial-gradient(var(--ink) 1px,transparent 1.4px);background-size:14px 14px;background-position:0 0;
-  padding:32px 16px 64px}
+  background-image:radial-gradient(var(--ink) 1px,transparent 1.4px);background-size:14px 14px;padding:32px 16px 64px}
 body::before{content:"";position:fixed;inset:0;background:var(--paper);opacity:.9;z-index:-1}
 .wrap{max-width:980px;margin:0 auto}
+
+/* header + search */
 h1{font-family:'Bowlby One',Impact,sans-serif;font-size:clamp(40px,9vw,92px);line-height:.9;text-transform:uppercase;letter-spacing:-1px}
 h1 span{display:inline-block;background:var(--hot);color:var(--paper);padding:0 .15em;transform:rotate(-2deg);border:4px solid var(--ink);box-shadow:6px 6px 0 var(--ink)}
 .sub{margin:18px 0 26px;font-weight:700;max-width:520px}
-form{display:flex;gap:0;max-width:560px;border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);background:#fff}
+form{display:flex;max-width:560px;border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);background:#fff}
 .at{background:var(--lemon);padding:14px 16px;font-weight:700;font-size:20px;border-right:4px solid var(--ink)}
 input{flex:1;min-width:0;border:0;outline:0;font:700 18px 'Space Mono',monospace;padding:0 14px;background:transparent}
 button{border:0;border-left:4px solid var(--ink);background:var(--sky);color:#fff;font:700 16px 'Space Mono',monospace;padding:0 22px;cursor:pointer;text-transform:uppercase}
-button:hover{background:var(--hot)}button:active{transform:translate(2px,2px)}
+button:hover{background:var(--hot)}
+button:active{transform:translate(2px,2px)}
 .err{margin-top:22px;display:inline-block;background:var(--hot);color:#fff;border:4px solid var(--ink);padding:10px 14px;font-weight:700;box-shadow:5px 5px 0 var(--ink)}
+.foot{margin-top:34px;font-size:12px;font-weight:700}
+
+/* card */
 .stage{margin-top:44px;perspective:1200px}
 .card{display:grid;grid-template-columns:300px 1fr;border:5px solid var(--ink);background:#fff;box-shadow:14px 14px 0 var(--ink);transition:transform .15s ease-out;transform-style:preserve-3d;animation:drop .5s cubic-bezier(.2,1.4,.4,1)}
 @keyframes drop{from{opacity:0;transform:translateY(-40px) rotate(-4deg)}}
@@ -38,151 +40,596 @@ button:hover{background:var(--hot)}button:active{transform:translate(2px,2px)}
 .bio{margin-top:10px;font-size:13px;line-height:1.4}
 .class{display:inline-block;margin-top:14px;background:var(--ink);color:var(--lemon);padding:5px 10px;font-weight:700;font-size:12px;text-transform:uppercase;transform:rotate(-2deg)}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);margin-top:18px;border:4px solid var(--ink);background:#fff}
-.stats div{padding:8px 4px;text-align:center;border-right:4px solid var(--ink)}.stats div:last-child{border:0}
-.stats b{display:block;font-family:'Bowlby One',sans-serif;font-size:20px}.stats small{font-size:10px;text-transform:uppercase;font-weight:700}
+.stats div{padding:8px 4px;text-align:center;border-right:4px solid var(--ink)}
+.stats div:last-child{border:0}
+.stats b{display:block;font-family:'Bowlby One',sans-serif;font-size:20px}
+.stats small{font-size:10px;text-transform:uppercase;font-weight:700}
+
+/* right column */
 .right{padding:22px 26px;display:flex;flex-direction:column;gap:26px;min-width:0}
 h2{font-family:'Bowlby One',sans-serif;font-size:18px;text-transform:uppercase;display:inline-block;background:var(--ink);color:var(--paper);padding:3px 10px;margin-bottom:12px}
 .langbar{display:flex;height:42px;border:4px solid var(--ink)}
-.langbar i{display:block;border-right:3px solid var(--ink);transition:flex .6s}.langbar i:last-child{border:0}
+.langbar i{display:block;border-right:3px solid var(--ink);transition:flex .6s}
+.langbar i:last-child{border:0}
 .legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:13px;font-weight:700}
-.legend span::before{content:"";display:inline-block;width:12px;height:12px;border:2px solid var(--ink);margin-right:6px;background:var(--c)}
+.legend span.dot::before{content:"";display:inline-block;width:12px;height:12px;border:2px solid var(--ink);margin-right:6px;background:var(--c)}
 .repos{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .repo{display:block;text-decoration:none;color:inherit;border:4px solid var(--ink);padding:12px;background:var(--bg);box-shadow:5px 5px 0 var(--ink);transition:transform .1s,box-shadow .1s;min-width:0}
 .repo:hover{transform:translate(-3px,-3px) rotate(-.6deg);box-shadow:9px 9px 0 var(--ink)}
 .repo b{display:block;font-size:15px;word-break:break-word}
 .repo p{font-size:12px;margin:6px 0 10px;line-height:1.35;min-height:32px}
 .repo .m{display:flex;gap:10px;font-size:12px;font-weight:700;flex-wrap:wrap}
-.tape{border:4px solid var(--ink);background:var(--paper);position:relative}
+.tape{border:4px solid var(--ink);background:var(--paper);padding:0}
 .tape li{list-style:none;display:flex;gap:10px;padding:8px 12px;font-size:13px;border-bottom:3px dashed var(--ink);align-items:baseline}
 .tape li:last-child{border:0}
 .tag{flex:none;background:var(--c);border:2px solid var(--ink);padding:0 6px;font-size:11px;font-weight:700;text-transform:uppercase}
 .tape .t{margin-left:auto;flex:none;font-size:11px;opacity:.7}
 .tape .x{min-width:0;word-break:break-word}
-.foot{margin-top:34px;font-size:12px;font-weight:700}
-@media(max-width:760px){.card{grid-template-columns:1fr}.left{border-right:0;border-bottom:5px solid var(--ink)}.repos{grid-template-columns:1fr}form{flex-wrap:wrap}}
+
+@media(max-width:760px){
+  .card{grid-template-columns:1fr}
+  .left{border-right:0;border-bottom:5px solid var(--ink)}
+  .repos{grid-template-columns:1fr}
+  form{flex-wrap:wrap}
+}
+
+/* ---- v2: tabs, chips, discover, rarity ---- */
+.tabs{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:26px}
+.tabs button{border:4px solid var(--ink);background:#fff;color:var(--ink);box-shadow:4px 4px 0 var(--ink);padding:8px 14px}
+.tabs button.on{background:var(--ink);color:var(--paper)}
+.tabs button:hover{background:var(--lemon);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;margin-top:6px}
+.chip{border:3px solid var(--ink);background:#fff;color:var(--ink);padding:2px 8px;font:700 12px 'Space Mono',monospace;margin:0 6px 6px 0;cursor:pointer;text-transform:none}
+.chip:hover{background:var(--hot);color:#fff}
+.acts{display:flex;flex-wrap:wrap;align-items:center;margin-top:12px}
+.rar{background:var(--ink);color:var(--lemon);padding:3px 8px;margin:0 8px 6px 0;font-weight:700;font-size:12px;text-transform:uppercase}
+.dna{margin-top:14px}.dna small{font-weight:700;font-size:10px}
+.row{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px}
+select,.mini{border:4px solid var(--ink);background:#fff;font:700 14px 'Space Mono',monospace;padding:8px 10px;box-shadow:4px 4px 0 var(--ink);outline:0}
+.mini{width:210px;flex:none}
+.tab{margin-bottom:10px}
+.repos.wide{margin-top:22px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.person .pav{width:54px;height:54px;border:3px solid var(--ink);float:right;margin-left:8px}
+.person .m span::after{content:" "}
+.foot a{color:var(--sky)}
+.card{position:relative}
+.card.Rare{border-color:var(--sky)}
+.card.Epic,.card.Legendary{border-image:linear-gradient(120deg,#ff4d2e,#ffd84a,#42d6a4,#2e6bff,#a77bff,#ff4d2e) 1}
+.card.Legendary::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.6) 45%,transparent 60%);background-size:250% 100%;animation:shine 3s linear infinite}
+@keyframes shine{from{background-position:150% 0}to{background-position:-50% 0}}
+
+
+.tool{margin-bottom:10px}
+.bigscore{font-family:'Bowlby One',sans-serif;font-size:56px;line-height:1;margin:8px 0}
+.chk{display:flex;gap:10px;align-items:flex-start;border:4px solid var(--ink);background:#fff;padding:8px 12px;margin-bottom:8px;box-shadow:4px 4px 0 var(--ink);max-width:640px;cursor:pointer}
+.chk input{margin-top:4px;width:18px;height:18px;flex:none}
+.chk small{display:block;font-size:11px;opacity:.7;margin-top:2px}
+.chk input:checked+span{text-decoration:line-through;opacity:.6}
 </style>
 </head>
 <body>
 <div id="root"></div>
-<script type="text/babel">
-const { useState, useRef } = React;
-const LANG = {JavaScript:'#ffd84a',TypeScript:'#2e6bff',Python:'#42d6a4',Go:'#5fd4ff',Rust:'#ff8a3d',Java:'#ff4d2e',HTML:'#ff6fae',CSS:'#a77bff',C:'#9aa0a6','C++':'#e0457b','C#':'#6bbf59',Ruby:'#d62f4a',PHP:'#8892bf',Swift:'#ff7a45',Kotlin:'#b36bff',Shell:'#7ed957',Jupyter:'#ff9d4a','Jupyter Notebook':'#ff9d4a',Dart:'#3ec7e0'};
-const FALL = ['#ffd84a','#2e6bff','#42d6a4','#ff4d2e','#ff6fae','#a77bff'];
-const colorOf=(l,i)=>LANG[l]||FALL[i%FALL.length];
-const BG=['#fff3b8','#cfe0ff','#c8f5e4','#ffd0c6'];
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script>
+// Helpers + GitHub API logic (plain JavaScript, no React in here)
 
-function ago(d){const s=(Date.now()-new Date(d))/1000;
-  if(s<3600)return Math.max(1,Math.floor(s/60))+'m ago';
-  if(s<86400)return Math.floor(s/3600)+'h ago';
-  if(s<2592000)return Math.floor(s/86400)+'d ago';
-  return Math.floor(s/2592000)+'mo ago';}
+const LANG = {JavaScript:'#ffd84a',TypeScript:'#2e6bff',Python:'#42d6a4',Go:'#5fd4ff',Rust:'#ff8a3d',Java:'#ff4d2e',HTML:'#ff6fae',CSS:'#a77bff',C:'#9aa0a6','C++':'#e0457b','C#':'#6bbf59',Ruby:'#d62f4a',PHP:'#8892bf',Swift:'#ff7a45',Kotlin:'#b36bff',Shell:'#7ed957','Jupyter Notebook':'#ff9d4a',Dart:'#3ec7e0'};
+const FALLBACK = ['#ffd84a','#2e6bff','#42d6a4','#ff4d2e','#ff6fae','#a77bff'];
+const REPO_BG = ['#fff3b8','#cfe0ff','#c8f5e4','#ffd0c6'];
 
-function describe(e){
-  const r=e.repo.name.split('/')[1]||e.repo.name, p=e.payload;
-  switch(e.type){
-    case 'PushEvent':{const n=p.size||(p.commits||[]).length||1;return ['PUSH',  '#42d6a4', `${n} commit${n>1?'s':''} → ${r}`];}
-    case 'PullRequestEvent':return ['PR','#2e6bff',`${p.action} PR #${p.number} in ${r}`];
-    case 'IssuesEvent':return ['ISSUE','#ff4d2e',`${p.action} issue in ${r}`];
-    case 'IssueCommentEvent':return ['TALK','#ffd84a',`commented on ${r}`];
-    case 'WatchEvent':return ['STAR','#ffd84a',`starred ${r}`];
-    case 'ForkEvent':return ['FORK','#a77bff',`forked ${r}`];
-    case 'CreateEvent':return ['NEW','#ff6fae',`created ${p.ref_type} in ${r}`];
-    case 'ReleaseEvent':return ['SHIP','#42d6a4',`released in ${r}`];
-    default:return [e.type.replace('Event','').toUpperCase().slice(0,6),'#fff',`activity in ${r}`];}
+const colorOf = (lang, i) => LANG[lang] || FALLBACK[i % FALLBACK.length];
+
+function timeAgo(date) {
+  const s = (Date.now() - new Date(date)) / 1000;
+  if (s < 3600) return Math.max(1, Math.floor(s / 60)) + 'm ago';
+  if (s < 86400) return Math.floor(s / 3600) + 'h ago';
+  if (s < 2592000) return Math.floor(s / 86400) + 'd ago';
+  return Math.floor(s / 2592000) + 'mo ago';
 }
 
-function builderClass(langs,stars,followers){
-  const top=langs[0]?.name;
-  const rank=stars>1000?'Legend':stars>100?'Veteran':stars>10?'Maker':'Rookie';
-  return `${rank} · ${top?top+' Wrangler':'Code Wanderer'}${followers>500?' ★':''}`;
-}
-
-function Card({data}){
-  const ref=useRef();
-  const {user,repos,langs,events}=data;
-  const stars=repos.reduce((a,r)=>a+r.stargazers_count,0);
-  const tilt=e=>{const b=ref.current.getBoundingClientRect();
-    const x=(e.clientX-b.left)/b.width-.5,y=(e.clientY-b.top)/b.height-.5;
-    ref.current.style.transform=`rotateY(${x*6}deg) rotateX(${-y*6}deg)`;};
-  const reset=()=>ref.current.style.transform='';
-  const top=[...repos].filter(r=>!r.fork).sort((a,b)=>b.stargazers_count-a.stargazers_count).slice(0,4);
-  return (
-    <div className="stage"><div className="card" ref={ref} onMouseMove={tilt} onMouseLeave={reset}>
-      <div className="left">
-        <img className="avatar" src={user.avatar_url} alt=""/>
-        <div className="name">{user.name||user.login}</div>
-        <div className="handle">@{user.login}</div>
-        {user.bio&&<div className="bio">{user.bio}</div>}
-        <div className="class">{builderClass(langs,stars,user.followers)}</div>
-        <div className="stats">
-          <div><b>{user.public_repos}</b><small>repos</small></div>
-          <div><b>{stars}</b><small>stars</small></div>
-          <div><b>{user.followers}</b><small>fans</small></div>
-        </div>
-      </div>
-      <div className="right">
-        <section>
-          <h2>Main languages</h2>
-          {langs.length?<>
-            <div className="langbar">{langs.map((l,i)=><i key={l.name} style={{flex:l.pct,background:colorOf(l.name,i)}} title={l.name}/>)}</div>
-            <div className="legend">{langs.map((l,i)=><span key={l.name} style={{'--c':colorOf(l.name,i)}}>{l.name} {Math.round(l.pct)}%</span>)}</div>
-          </>:<div className="legend">No language data yet.</div>}
-        </section>
-        <section>
-          <h2>Top repos</h2>
-          <div className="repos">{top.length?top.map((r,i)=>
-            <a className="repo" key={r.id} href={r.html_url} target="_blank" rel="noreferrer" style={{'--bg':BG[i%4]}}>
-              <b>{r.name}</b><p>{(r.description||'No description. Mystery project.').slice(0,90)}</p>
-              <div className="m"><span>★ {r.stargazers_count}</span><span>⑂ {r.forks_count}</span>{r.language&&<span>{r.language}</span>}</div>
-            </a>):<div className="legend">No original repos found.</div>}</div>
-        </section>
-        <section>
-          <h2>Recent activity</h2>
-          <ul className="tape" style={{padding:0}}>{events.length?events.map(e=>{const [t,c,x]=describe(e);
-            return <li key={e.id}><span className="tag" style={{'--c':c,background:c}}>{t}</span><span className="x">{x}</span><span className="t">{ago(e.created_at)}</span></li>}):
-            <li>No public activity lately.</li>}</ul>
-        </section>
-      </div>
-    </div></div>);
-}
-
-function App(){
-  const [name,setName]=useState('');
-  const [state,setState]=useState({s:'idle'});
-  async function go(e){
-    e.preventDefault();
-    const u=name.trim().replace(/^@/,'');
-    if(!u)return;
-    setState({s:'load'});
-    try{
-      const get=async p=>{const r=await fetch('https://api.github.com/'+p);
-        if(r.status===404)throw new Error(`No builder named "${u}".`);
-        if(r.status===403)throw new Error('GitHub rate limit hit. Try again in a bit.');
-        if(!r.ok)throw new Error('GitHub said: '+r.status);return r.json();};
-      const [user,repos,events]=await Promise.all([
-        get(`users/${u}`),get(`users/${u}/repos?per_page=100&sort=pushed`),get(`users/${u}/events/public?per_page=8`)]);
-      const tally={};
-      repos.filter(r=>!r.fork&&r.language).forEach(r=>{tally[r.language]=(tally[r.language]||0)+Math.sqrt(r.size+1)+r.stargazers_count;});
-      const sum=Object.values(tally).reduce((a,b)=>a+b,0)||1;
-      const langs=Object.entries(tally).sort((a,b)=>b[1]-a[1]).slice(0,6).map(([n,v])=>({name:n,pct:v/sum*100}));
-      setState({s:'ok',data:{user,repos,langs,events}});
-    }catch(err){setState({s:'err',msg:err.message==='Failed to fetch'?'Network error. Are you online?':err.message});}
+// Turn a GitHub event into [TAG, color, text]
+function describeEvent(e) {
+  const repo = e.repo.name.split('/')[1] || e.repo.name;
+  const p = e.payload;
+  switch (e.type) {
+    case 'PushEvent': { const n = p.size || (p.commits || []).length || 1; return ['PUSH', '#42d6a4', `${n} commit${n > 1 ? 's' : ''} → ${repo}`]; }
+    case 'PullRequestEvent': return ['PR', '#2e6bff', `${p.action} PR #${p.number} in ${repo}`];
+    case 'IssuesEvent': return ['ISSUE', '#ff4d2e', `${p.action} issue in ${repo}`];
+    case 'IssueCommentEvent': return ['TALK', '#ffd84a', `commented on ${repo}`];
+    case 'WatchEvent': return ['STAR', '#ffd84a', `starred ${repo}`];
+    case 'ForkEvent': return ['FORK', '#a77bff', `forked ${repo}`];
+    case 'CreateEvent': return ['NEW', '#ff6fae', `created ${p.ref_type} in ${repo}`];
+    case 'ReleaseEvent': return ['SHIP', '#42d6a4', `released in ${repo}`];
+    default: return [e.type.replace('Event', '').toUpperCase().slice(0, 6), '#ffffff', `activity in ${repo}`];
   }
-  return (
-    <div className="wrap">
-      <h1>Builder<br/><span>Card</span></h1>
-      <p className="sub">Type a GitHub handle. Get a collectible card of what they build.</p>
-      <form onSubmit={go}>
-        <div className="at">@</div>
-        <input value={name} onChange={e=>setName(e.target.value)} placeholder="torvalds" autoFocus aria-label="GitHub username"/>
-        <button type="submit">{state.s==='load'?'…':'Deal'}</button>
-      </form>
-      {state.s==='err'&&<div className="err">✖ {state.msg}</div>}
-      {state.s==='ok'&&<Card key={state.data.user.login} data={state.data}/>}
-      <div className="foot">Data: public GitHub API · languages weighted by repo size + stars</div>
-    </div>);
 }
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+
+function builderClass(langs, stars, followers) {
+  const top = langs[0] && langs[0].name;
+  const rank = stars > 1000 ? 'Legend' : stars > 100 ? 'Veteran' : stars > 10 ? 'Maker' : 'Rookie';
+  return `${rank} · ${top ? top + ' Wrangler' : 'Code Wanderer'}${followers > 500 ? ' ★' : ''}`;
+}
+
+// ---------- storage, cached GitHub API, new helpers ----------
+const store = {
+  get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v === null ? d : v; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const cache = {};
+async function api(path, notFound) {
+  if (cache[path]) return cache[path];
+  const tok = store.get('bc_token', '');
+  const res = await fetch('https://api.github.com/' + path, { headers: tok ? { Authorization: 'Bearer ' + tok } : {} });
+  if (res.status === 404) throw new Error(notFound || 'Nothing found.');
+  if (res.status === 403 || res.status === 429) throw new Error('GitHub rate limit hit. Wait a minute, or add a token (footer link).');
+  if (!res.ok) throw new Error('GitHub said: ' + res.status);
+  return (cache[path] = await res.json());
+}
+const rarity = s => s >= 1000 ? 'Legendary' : s >= 100 ? 'Epic' : s >= 10 ? 'Rare' : 'Common';
+const daysAgo = n => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10);
+function health(r) {
+  const d = (Date.now() - new Date(r.pushed_at)) / 864e5;
+  return d < 30 ? ['ALIVE', '#42d6a4'] : d < 180 ? ['SLOW', '#ffd84a'] : ['DEAD', '#ff4d2e'];
+}
+// "Interest DNA": most common repo topics, boosted a bit by stars
+function interestDNA(repos) {
+  const c = {};
+  repos.filter(r => !r.fork).forEach(r => (r.topics || []).forEach(t => { c[t] = (c[t] || 0) + 1 + Math.log2(r.stargazers_count + 1) / 4; }));
+  return Object.entries(c).sort((a, b) => b[1] - a[1]).slice(0, 6).map(e => e[0]);
+}
+async function searchRepos(topic, extra = '', sort = 'stars', n = 12) {
+  const slug = topic.trim().toLowerCase().replace(/\s+/g, '-');
+  const q = s => `search/repositories?q=${encodeURIComponent(s)}&sort=${sort}&per_page=${n}`;
+  let d = await api(q(`topic:${slug} ${extra}`));
+  if (!d.items.length) d = await api(q(`${topic} in:name,description ${extra}`));
+  return d.items;
+}
+async function fetchBuilder(username) {
+  const [user, repos, events] = await Promise.all([
+    api(`users/${username}`, `No builder named "${username}".`),
+    api(`users/${username}/repos?per_page=100&sort=pushed`),
+    api(`users/${username}/events/public?per_page=8`)
+  ]);
+  const tally = {};
+  repos.filter(r => !r.fork && r.language).forEach(r => {
+    tally[r.language] = (tally[r.language] || 0) + Math.sqrt(r.size + 1) + r.stargazers_count;
+  });
+  const total = Object.values(tally).reduce((a, b) => a + b, 0) || 1;
+  const langs = Object.entries(tally).sort((a, b) => b[1] - a[1]).slice(0, 6)
+    .map(([name, v]) => ({ name, pct: (v / total) * 100 }));
+  return { user, repos, langs, events };
+}
+
+
+// React components written with React.createElement (no JSX / no build step)
+const h = React.createElement;
+
+function LanguageBar({ langs }) {
+  if (!langs.length) return h('div', { className: 'legend' }, 'No language data yet.');
+  return h(React.Fragment, null,
+    h('div', { className: 'langbar' },
+      langs.map((l, i) => h('i', { key: l.name, title: l.name, style: { flex: l.pct, background: colorOf(l.name, i) } }))),
+    h('div', { className: 'legend' },
+      langs.map((l, i) => h('span', { key: l.name, className: 'dot', style: { '--c': colorOf(l.name, i) } }, `${l.name} ${Math.round(l.pct)}%`))));
+}
+
+function RepoTile({ repo, index }) {
+  return h('a', { className: 'repo', href: repo.html_url, target: '_blank', rel: 'noreferrer', style: { '--bg': REPO_BG[index % 4] } },
+    h('b', null, repo.name),
+    h('p', null, (repo.description || 'No description. Mystery project.').slice(0, 90)),
+    h('div', { className: 'm' },
+      h('span', null, '★ ' + repo.stargazers_count),
+      h('span', null, '⑂ ' + repo.forks_count),
+      repo.language && h('span', null, repo.language)));
+}
+
+function ActivityTape({ events }) {
+  return h('ul', { className: 'tape' },
+    events.length
+      ? events.map(e => {
+          const [tag, color, text] = describeEvent(e);
+          return h('li', { key: e.id },
+            h('span', { className: 'tag', style: { background: color } }, tag),
+            h('span', { className: 'x' }, text),
+            h('span', { className: 't' }, timeAgo(e.created_at)));
+        })
+      : h('li', null, 'No public activity lately.'));
+}
+
+function Card({ data, onTopic, onLike, savedPeople, togglePerson }) {
+  const ref = React.useRef();
+  const { user, repos, langs, events } = data;
+  const stars = repos.reduce((a, r) => a + r.stargazers_count, 0);
+  const dna = interestDNA(repos);
+  const [cp, setCp] = React.useState(false);
+  const topRepos = repos.filter(r => !r.fork).sort((a, b) => b.stargazers_count - a.stargazers_count).slice(0, 4);
+
+  const tilt = (e) => {
+    const b = ref.current.getBoundingClientRect();
+    const x = (e.clientX - b.left) / b.width - 0.5;
+    const y = (e.clientY - b.top) / b.height - 0.5;
+    ref.current.style.transform = `rotateY(${x * 6}deg) rotateX(${-y * 6}deg)`;
+  };
+  const reset = () => { ref.current.style.transform = ''; };
+
+  const person = { login: user.login, avatar: user.avatar_url, repo: topRepos[0] ? topRepos[0].name : 'n/a', stars, topics: dna.slice(0, 3) };
+  const isSaved = savedPeople.some(x => x.login === user.login);
+  const copy = () => { try { navigator.clipboard.writeText(location.href.split('#')[0] + '#u=' + user.login); setCp(true); setTimeout(() => setCp(false), 1500); } catch (e) {} };
+  const left = h('div', { className: 'left' },
+    h('img', { className: 'avatar', src: user.avatar_url, alt: '' }),
+    h('div', { className: 'name' }, user.name || user.login),
+    h('div', { className: 'handle' }, '@' + user.login),
+    user.bio && h('div', { className: 'bio' }, user.bio),
+    h('div', { className: 'class' }, builderClass(langs, stars, user.followers)),
+    dna.length > 0 && h('div', { className: 'dna' }, h('small', null, 'INTEREST DNA'), h(Chips, { items: dna.slice(0, 4), onPick: onTopic })),
+    h('div', { className: 'acts' },
+      h('span', { className: 'rar' }, rarity(stars)),
+      h('button', { className: 'chip', type: 'button', onClick: () => togglePerson(person) }, isSaved ? '★ Saved' : '☆ Save'),
+      h('button', { className: 'chip', type: 'button', onClick: copy }, cp ? '✓ Copied' : '🔗 Link'),
+      h('button', { className: 'chip', type: 'button', onClick: () => onLike(user.login) }, 'Find similar')),
+    h('div', { className: 'stats' },
+      h('div', null, h('b', null, user.public_repos), h('small', null, 'repos')),
+      h('div', null, h('b', null, stars), h('small', null, 'stars')),
+      h('div', null, h('b', null, user.followers), h('small', null, 'fans'))));
+
+  const right = h('div', { className: 'right' },
+    h('section', null, h('h2', null, 'Main languages'), h(LanguageBar, { langs })),
+    h('section', null, h('h2', null, 'Top repos'),
+      h('div', { className: 'repos' },
+        topRepos.length
+          ? topRepos.map((r, i) => h(RepoTile, { key: r.id, repo: r, index: i }))
+          : h('div', { className: 'legend' }, 'No original repos found.'))),
+    h('section', null, h('h2', null, 'Recent activity'), h(ActivityTape, { events })));
+
+  return h('div', { className: 'stage' },
+    h('div', { className: 'card ' + rarity(stars), ref, onMouseMove: tilt, onMouseLeave: reset }, left, right));
+}
+
+
+// Discover tabs: repos by topic, people by interest, saved items
+const { useState, useEffect } = React;
+
+function Chips({ items, onPick }) {
+  return h('div', { className: 'chips' }, items.map(t => h('button', { key: t, className: 'chip', type: 'button', onClick: () => onPick(t) }, '#' + t)));
+}
+const Err = ({ msg }) => msg ? h('div', { className: 'err' }, '✖ ' + msg) : null;
+const SaveBtn = ({ on, onClick }) => h('button', { className: 'chip', type: 'button', onClick }, on ? '★ Saved' : '☆ Save');
+
+function RepoRow({ repo, saved, toggle, index }) {
+  const [hl, col] = health(repo);
+  return h('div', { className: 'repo', style: { '--bg': REPO_BG[index % 4] } },
+    h('a', { href: repo.html_url, target: '_blank', rel: 'noreferrer', style: { color: 'inherit' } }, h('b', null, repo.full_name)),
+    h('p', null, (repo.description || 'No description.').slice(0, 100)),
+    h('div', { className: 'm' }, h('span', null, '★ ' + repo.stargazers_count), repo.language && h('span', null, repo.language),
+      h('span', { className: 'tag', style: { background: col } }, hl)),
+    h('div', { className: 'acts' }, h(SaveBtn, { on: saved.some(r => r.id === repo.id), onClick: () => toggle(repo) })));
+}
+
+function ReposTab({ savedRepos, toggleRepo }) {
+  const [q, setQ] = useState(''), [lang, setLang] = useState(''), [mode, setMode] = useState('top');
+  const [res, setRes] = useState(null), [err, setErr] = useState(''), [busy, setBusy] = useState(false);
+  async function go(e) {
+    e.preventDefault(); if (!q.trim()) return;
+    setBusy(true); setErr('');
+    try {
+      let x = lang.trim() ? `language:${lang.trim()}` : '';
+      if (mode === 'gems') x += ` stars:5..300 pushed:>${daysAgo(30)}`;
+      if (mode === 'fresh') x += ` stars:>20 pushed:>${daysAgo(14)}`;
+      setRes(await searchRepos(q, x, mode === 'top' ? 'stars' : 'updated'));
+    } catch (ex) { setErr(ex.message); }
+    setBusy(false);
+  }
+  return h('div', { className: 'tab' },
+    h('form', { onSubmit: go }, h('div', { className: 'at' }, '#'),
+      h('input', { value: q, onChange: e => setQ(e.target.value), placeholder: 'rag, rust cli, game-dev…' }),
+      h('button', { type: 'submit' }, busy ? '…' : 'Search')),
+    h('div', { className: 'row' },
+      h('select', { value: mode, onChange: e => setMode(e.target.value) },
+        h('option', { value: 'top' }, 'Top starred'), h('option', { value: 'gems' }, 'Hidden gems (5–300 ★, active)'), h('option', { value: 'fresh' }, 'Hot this fortnight')),
+      h('input', { className: 'mini', value: lang, onChange: e => setLang(e.target.value), placeholder: 'language (optional)' })),
+    h(Err, { msg: err }),
+    res && h('div', { className: 'repos wide' }, res.length
+      ? res.map((r, i) => h(RepoRow, { key: r.id, repo: r, index: i, saved: savedRepos, toggle: toggleRepo }))
+      : h('div', { className: 'legend' }, 'Nothing found. Try another topic.')));
+}
+
+function PersonTile({ p, saved, toggle, open }) {
+  return h('div', { className: 'repo person' },
+    h('img', { className: 'pav', src: p.avatar, alt: '' }),
+    h('b', null, '@' + p.login),
+    h('p', null, `builds ${p.repo} ★${p.stars}`),
+    h('div', { className: 'm' }, p.topics.map(t => h('span', { key: t }, '#' + t))),
+    h('div', { className: 'acts' },
+      h('button', { className: 'chip', type: 'button', onClick: () => open(p.login) }, 'Open card'),
+      h(SaveBtn, { on: saved.some(x => x.login === p.login), onClick: () => toggle(p) })));
+}
+
+async function peopleByTopics(topics, exclude) {
+  const lists = await Promise.all(topics.map(t => searchRepos(t, '', 'stars', 25)));
+  const map = {};
+  lists.forEach((items, i) => items.forEach(r => {
+    if (r.owner.type !== 'User' || r.owner.login.toLowerCase() === exclude) return;
+    const p = map[r.owner.login] || (map[r.owner.login] = { login: r.owner.login, avatar: r.owner.avatar_url, repo: r.name, stars: r.stargazers_count, topics: [], score: 0 });
+    if (!p.topics.includes(topics[i])) { p.topics.push(topics[i]); p.score++; }
+    if (r.stargazers_count > p.stars) { p.stars = r.stargazers_count; p.repo = r.name; }
+  }));
+  return Object.values(map).sort((a, b) => b.score - a.score || b.stars - a.stars).slice(0, 12);
+}
+
+function PeopleTab({ init, open, savedPeople, togglePerson }) {
+  const [t, setT] = useState(''), [u, setU] = useState(''), [res, setRes] = useState(null);
+  const [err, setErr] = useState(''), [busy, setBusy] = useState(false), [note, setNote] = useState('');
+  async function run(fn) { setBusy(true); setErr(''); try { await fn(); } catch (e) { setErr(e.message); } setBusy(false); }
+  const byTopic = topic => run(async () => {
+    const x = topic.split(',').map(s => s.trim()).filter(Boolean); if (!x.length) return;
+    setNote('Builders into ' + x.map(s => '#' + s).join(' ')); setRes(await peopleByTopics(x, ''));
+  });
+  const like = user => run(async () => {
+    user = user.trim().replace(/^@/, ''); if (!user) return;
+    const repos = await api(`users/${user}/repos?per_page=100&sort=pushed`, `No builder named "${user}".`);
+    const dna = interestDNA(repos).slice(0, 3);
+    if (!dna.length) throw new Error('That profile has no repo topics to learn from. Try a topic search.');
+    setNote(`Builders like @${user}, based on ${dna.map(s => '#' + s).join(' ')}`);
+    setRes(await peopleByTopics(dna, user.toLowerCase()));
+  });
+  useEffect(() => {
+    if (!init) return;
+    if (init.topic) { setT(init.topic); byTopic(init.topic); }
+    if (init.like) { setU(init.like); like(init.like); }
+  }, [init]);
+  const box = (val, set, ph, go, sign) => h('form', { onSubmit: e => { e.preventDefault(); go(val); } },
+    h('div', { className: 'at' }, sign), h('input', { value: val, onChange: e => set(e.target.value), placeholder: ph }),
+    h('button', { type: 'submit' }, busy ? '…' : 'Find'));
+  return h('div', { className: 'tab' },
+    box(t, setT, 'interests, comma separated: ai, rust', byTopic, '#'),
+    h('div', { style: { height: 14 } }),
+    box(u, setU, 'or: builders like @username', like, '@'),
+    h(Err, { msg: err }),
+    res && h('h2', { style: { marginTop: 22 } }, note),
+    res && h('div', { className: 'repos wide' }, res.length
+      ? res.map(p => h(PersonTile, { key: p.login, p, saved: savedPeople, toggle: togglePerson, open }))
+      : h('div', { className: 'legend' }, 'No one found. Try broader topics.')));
+}
+
+function SavedTab({ repos, people, toggleRepo, togglePerson, open }) {
+  return h('div', { className: 'tab' },
+    h('h2', null, 'Saved repos'),
+    repos.length ? h('div', { className: 'repos wide' }, repos.map((r, i) => h(RepoRow, { key: r.id, repo: r, index: i, saved: repos, toggle: toggleRepo })))
+      : h('div', { className: 'legend' }, 'Nothing yet. Hit ☆ Save on any repo.'),
+    h('div', { style: { height: 24 } }),
+    h('h2', null, 'Saved builders'),
+    people.length ? h('div', { className: 'repos wide' }, people.map(p => h(PersonTile, { key: p.login, p, saved: people, toggle: togglePerson, open })))
+      : h('div', { className: 'legend' }, 'Nobody yet. Save people from a card or from search.'));
+}
+
+
+// ===== Contribute tab: tools for open source contributors =====
+const repoOf = u => u.replace('https://api.github.com/repos/', '');
+const parseRepo = s => { const m = (s || '').trim().replace(/^https?:\/\/github\.com\//, '').match(/^([\w.-]+)\/([\w.-]+)/); return m ? m[1] + '/' + m[2].replace(/\.git$/, '') : null; };
+const median = a => { if (!a.length) return null; a = [...a].sort((x, y) => x - y); return a[Math.floor(a.length / 2)]; };
+const dur = x => x == null ? 'n/a' : x < 48 ? Math.round(x) + 'h' : Math.round(x / 24) + 'd';
+function useRun() {
+  const [err, setErr] = useState(''), [busy, setBusy] = useState(false);
+  const run = async fn => { setBusy(true); setErr(''); try { await fn(); } catch (e) { setErr(e.message); } setBusy(false); };
+  return [err, busy, run];
+}
+const Field = ({ val, set, ph, go, btn, busy }) => h('form', { onSubmit: e => { e.preventDefault(); go(); } },
+  h('div', { className: 'at' }, '›'), h('input', { value: val, onChange: e => set(e.target.value), placeholder: ph }),
+  h('button', { type: 'submit' }, busy ? '…' : btn));
+const Tile = ({ i, children }) => h('div', { className: 'repo', style: { '--bg': REPO_BG[i % 4] } }, children);
+const Note = ({ children }) => h('div', { className: 'legend', style: { margin: '10px 0' } }, children);
+
+// 1. Good First Issue Finder
+function IssueFinder() {
+  const [lang, setLang] = useState(''), [mode, setMode] = useState('gfi'), [fresh, setFresh] = useState(true), [res, setRes] = useState(null), [err, busy, run] = useRun();
+  const go = () => run(async () => {
+    const lbl = { gfi: 'good first issue', help: 'help wanted', docs: 'documentation' }[mode];
+    let q = `label:"${lbl}" state:open is:issue no:assignee archived:false updated:>${daysAgo(90)}`;
+    if (lang.trim()) q += ` language:${lang.trim()}`;
+    const d = await api(`search/issues?q=${encodeURIComponent(q)}&sort=updated&per_page=30`);
+    setRes(d.items.filter(i => !i.pull_request && (!fresh || i.comments === 0)).slice(0, 15));
+  });
+  return h('div', null,
+    h(Field, { val: lang, set: setLang, ph: 'language (python, rust, …) or leave empty', go, btn: 'Find', busy }),
+    h('div', { className: 'row' },
+      h('select', { value: mode, onChange: e => setMode(e.target.value) }, h('option', { value: 'gfi' }, 'Good first issue'), h('option', { value: 'help' }, 'Help wanted'), h('option', { value: 'docs' }, 'Docs and typos (easiest first PR)')),
+      h('label', { className: 'chip', style: { padding: '8px 10px' } }, h('input', { type: 'checkbox', checked: fresh, onChange: e => setFresh(e.target.checked), style: { marginRight: 6 } }), 'only unclaimed (0 comments)')),
+    h(Err, { msg: err }),
+    res && h('div', { className: 'repos wide' }, res.length ? res.map((i, k) => h(Tile, { key: i.id, i: k },
+      h('a', { href: i.html_url, target: '_blank', rel: 'noreferrer', style: { color: 'inherit' } }, h('b', null, i.title)),
+      h('p', null, repoOf(i.repository_url)),
+      h('div', { className: 'm' }, h('span', null, '💬 ' + i.comments), h('span', null, 'updated ' + timeAgo(i.updated_at)))))
+      : h(Note, null, 'No issues matched. Untick "unclaimed" or change the language.')));
+}
+
+// 2. Contributor-friendliness score
+function RepoScore() {
+  const [r, setR] = useState(''), [res, setRes] = useState(null), [err, busy, run] = useRun();
+  const go = () => run(async () => {
+    const name = parseRepo(r); if (!name) throw new Error('Use owner/repo or a GitHub URL.');
+    const [repo, comm, prs, ctr] = await Promise.all([api(`repos/${name}`, 'Repo not found.'),
+      api(`repos/${name}/community/profile`).catch(() => null),
+      api(`repos/${name}/pulls?state=closed&per_page=30&sort=updated&direction=desc`),
+      api(`repos/${name}/contributors?per_page=10`).catch(() => [])]);
+    const f = (comm && comm.files) || {}, merged = prs.filter(p => p.merged_at);
+    const rate = prs.length ? merged.length / prs.length : 0;
+    const ttm = median(merged.map(p => (new Date(p.merged_at) - new Date(p.created_at)) / 36e5));
+    const tot = Array.isArray(ctr) ? ctr.reduce((a, c) => a + c.contributions, 0) : 0;
+    const bus = tot ? ctr[0].contributions / tot : null;
+    const days = (Date.now() - new Date(repo.pushed_at)) / 864e5;
+    const checks = [
+      ['CONTRIBUTING guide', !!f.contributing, 15], ['Code of conduct', !!f.code_of_conduct, 10], ['Issue templates', !!f.issue_template, 5],
+      ['License', !!repo.license, 10], ['Pushed in last 30 days', days < 30, 15],
+      ['Most recent closed PRs get merged (' + Math.round(rate * 100) + '%)', rate >= 0.5, 20],
+      ['PRs merge fast (median ' + dur(ttm) + ')', ttm != null && ttm <= 168, 15],
+      ['Not a one-person show (top dev: ' + (bus == null ? 'n/a' : Math.round(bus * 100) + '%') + ')', bus != null && bus < 0.6, 10]];
+    const score = checks.reduce((a, c) => a + (c[1] ? c[2] : 0), 0);
+    setRes({ name, score, checks, repo });
+  });
+  return h('div', null,
+    h(Field, { val: r, set: setR, ph: 'owner/repo, e.g. facebook/react', go, btn: 'Score it', busy }),
+    h(Err, { msg: err }),
+    res && h('div', { className: 'repo', style: { '--bg': '#fff3b8', marginTop: 20, maxWidth: 560 } },
+      h('b', null, res.name), h('div', { className: 'bigscore' }, res.score + '/100'),
+      h('div', { className: 'rar' }, res.score >= 75 ? 'Very friendly' : res.score >= 50 ? 'Decent' : 'Tough one'),
+      h('ul', { className: 'tape', style: { marginTop: 12 } }, res.checks.map(c => h('li', { key: c[0] },
+        h('span', { className: 'tag', style: { background: c[1] ? '#42d6a4' : '#ff4d2e' } }, c[1] ? 'YES' : 'NO'), h('span', { className: 'x' }, c[0]))))));
+}
+
+// 3. PR checklist generator (reads CONTRIBUTING.md)
+const KEYS = [[/test/i, 'Run the tests'], [/lint|format|style|prettier|eslint/i, 'Run linter / formatter'], [/branch/i, 'Follow branch naming'],
+  [/commit message|conventional|sign.?off|DCO/i, 'Commit message rules / sign-off'], [/\bCLA\b|license agreement/i, 'Sign the CLA'],
+  [/changelog|changeset/i, 'Update the changelog'], [/docs|documentation/i, 'Update docs'], [/open an issue|issue first|discuss/i, 'Open or claim an issue first'], [/fork/i, 'Work from a fork']];
+function Checklist() {
+  const [r, setR] = useState(''), [items, setItems] = useState(null), [done, setDone] = useState({}), [cp, setCp] = useState(false), [err, busy, run] = useRun();
+  const go = () => run(async () => {
+    const name = parseRepo(r); if (!name) throw new Error('Use owner/repo or a GitHub URL.');
+    let txt = null;
+    for (const p of ['CONTRIBUTING.md', '.github/CONTRIBUTING.md', 'docs/CONTRIBUTING.md']) {
+      try { const c = await api(`repos/${name}/contents/${p}`); txt = decodeURIComponent(escape(atob(c.content.replace(/\n/g, '')))); break; }
+      catch (e) { if (/rate limit/.test(e.message)) throw e; }
+    }
+    if (!txt) throw new Error('No CONTRIBUTING.md found. Read the README and a few recently merged PRs instead.');
+    const lines = txt.split('\n'), out = [{ label: 'Read the contributing guide', hint: '' }];
+    KEYS.forEach(([re, label]) => { const l = lines.find(x => re.test(x)); if (l) out.push({ label, hint: l.replace(/[#*>`\[\]()]/g, '').trim().slice(0, 140) }); });
+    out.push({ label: 'Keep the PR small and focused', hint: '' }, { label: 'Link the issue (Fixes #123)', hint: '' });
+    setDone({}); setItems(out);
+  });
+  const copy = () => { try { navigator.clipboard.writeText(items.map(i => '- [ ] ' + i.label).join('\n')); setCp(true); setTimeout(() => setCp(false), 1500); } catch (e) {} };
+  return h('div', null,
+    h(Field, { val: r, set: setR, ph: 'owner/repo to contribute to', go, btn: 'Build', busy }),
+    h(Err, { msg: err }),
+    items && h('div', { style: { marginTop: 20 } },
+      items.map(i => h('label', { key: i.label, className: 'chk' }, h('input', { type: 'checkbox', checked: !!done[i.label], onChange: e => setDone({ ...done, [i.label]: e.target.checked }) }),
+        h('span', null, h('b', null, i.label), i.hint && h('small', null, i.hint)))),
+      h('button', { className: 'chip', type: 'button', onClick: copy, style: { marginTop: 10 } }, cp ? '✓ Copied' : 'Copy as markdown')));
+}
+
+// 4. Contribution tracker
+function Tracker() {
+  const [list, setList] = useState(() => store.get('bc_prs', [])), [u, setU] = useState(''), [err, busy, run] = useRun();
+  const save = l => { setList(l); store.set('bc_prs', l); };
+  const fetchPR = async (repo, n) => { const path = `repos/${repo}/pulls/${n}`; delete cache[path]; const p = await api(path, 'PR not found.');
+    return { key: repo + '#' + n, repo, n, title: p.title, url: p.html_url, state: p.merged_at ? 'merged' : p.state }; };
+  const add = () => run(async () => {
+    const m = u.match(/github\.com\/([\w.-]+\/[\w.-]+)\/pull\/(\d+)/); if (!m) throw new Error('Paste a PR link like github.com/owner/repo/pull/12');
+    const pr = await fetchPR(m[1], m[2]); save([pr, ...list.filter(x => x.key !== pr.key)]); setU('');
+  });
+  const refresh = () => run(async () => { const next = []; for (const x of list) { try { next.push(await fetchPR(x.repo, x.n)); } catch (e) { next.push(x); } } save(next); });
+  const c = s => list.filter(x => x.state === s).length, col = { merged: '#42d6a4', open: '#ffd84a', closed: '#ff4d2e' };
+  return h('div', null,
+    h(Field, { val: u, set: setU, ph: 'paste a PR link to track', go: add, btn: 'Track', busy }),
+    h(Err, { msg: err }),
+    h('div', { className: 'row' }, h('span', { className: 'rar' }, `${c('merged')} merged`), h('span', { className: 'rar' }, `${c('open')} open`), h('span', { className: 'rar' }, `${c('closed')} closed`),
+      list.length > 0 && h('button', { className: 'chip', type: 'button', onClick: refresh }, '↻ Refresh statuses')),
+    list.length ? h('ul', { className: 'tape', style: { marginTop: 14 } }, list.map(x => h('li', { key: x.key },
+      h('span', { className: 'tag', style: { background: col[x.state] } }, x.state), h('a', { className: 'x', href: x.url, target: '_blank', rel: 'noreferrer', style: { color: 'inherit' } }, x.repo + ' · ' + x.title),
+      h('button', { className: 'chip', type: 'button', onClick: () => save(list.filter(y => y.key !== x.key)), style: { marginLeft: 'auto' } }, '✕'))))
+      : h(Note, null, 'No PRs tracked yet. Paste one above.'));
+}
+
+// 5. Watchlist digest for saved repos
+function Watchlist({ savedRepos }) {
+  const [rows, setRows] = useState(null), [err, busy, run] = useRun();
+  const go = () => run(async () => {
+    const out = [];
+    for (const r of savedRepos.slice(0, 6)) {
+      const rel = await api(`repos/${r.full_name}/releases/latest`).catch(() => null);
+      const g = await api(`search/issues?q=${encodeURIComponent(`repo:${r.full_name} label:"good first issue" state:open is:issue`)}&per_page=1`).catch(() => null);
+      out.push({ name: r.full_name, url: r.html_url, rel: rel && rel.tag_name ? `${rel.tag_name} (${timeAgo(rel.published_at)})` : 'no releases', gfi: g ? g.total_count : '?' });
+    }
+    setRows(out);
+  });
+  return h('div', null,
+    !savedRepos.length && h(Note, null, 'Save some repos in Repo Radar first (up to 6 are checked).'),
+    savedRepos.length > 0 && h('button', { className: 'chip', type: 'button', onClick: go, style: { padding: '8px 12px' } }, busy ? 'Checking…' : 'Check my saved repos'),
+    h(Err, { msg: err }),
+    rows && h('ul', { className: 'tape', style: { marginTop: 14 } }, rows.map(x => h('li', { key: x.name },
+      h('a', { className: 'x', href: x.url, target: '_blank', rel: 'noreferrer', style: { color: 'inherit' } }, h('b', null, x.name)),
+      h('span', { className: 'tag', style: { background: '#ffd84a' } }, x.gfi + ' good first'), h('span', { className: 't' }, 'latest: ' + x.rel)))));
+}
+
+// 6. Contributor profile card (merged PRs in other people's repos)
+function ContribProfile() {
+  const [u, setU] = useState(''), [res, setRes] = useState(null), [err, busy, run] = useRun();
+  const go = () => run(async () => {
+    const user = u.trim().replace(/^@/, ''); if (!user) return;
+    const d = await api(`search/issues?q=${encodeURIComponent(`type:pr author:${user} is:merged -user:${user}`)}&sort=updated&per_page=100`);
+    const c = {}; d.items.forEach(i => { const r = repoOf(i.repository_url); c[r] = (c[r] || 0) + 1; });
+    setRes({ user, total: d.total_count, repos: Object.entries(c).sort((a, b) => b[1] - a[1]) });
+  });
+  const lvl = n => n >= 50 ? 'Core contributor' : n >= 10 ? 'Regular' : n >= 1 ? 'Newcomer' : 'Not yet';
+  return h('div', null,
+    h(Field, { val: u, set: setU, ph: 'GitHub username', go, btn: 'Show', busy }),
+    h(Err, { msg: err }),
+    res && h('div', { className: 'repo', style: { '--bg': '#c8f5e4', marginTop: 20, maxWidth: 560 } },
+      h('img', { className: 'pav', src: `https://github.com/${res.user}.png`, alt: '' }),
+      h('b', null, '@' + res.user), h('div', { className: 'bigscore' }, res.total), h('p', null, 'merged PRs in other people\'s repos'),
+      h('div', { className: 'rar' }, lvl(res.total)),
+      h('ul', { className: 'tape', style: { marginTop: 12 } }, res.repos.slice(0, 6).map(([r, n]) => h('li', { key: r }, h('span', { className: 'x' }, r), h('span', { className: 't' }, n + ' PR' + (n > 1 ? 's' : '')))))));
+}
+
+const SUBS = [['issues', 'Issue Finder'], ['score', 'Repo Score'], ['check', 'PR Checklist'], ['track', 'My PRs'], ['watch', 'Watchlist'], ['prof', 'Contributor Card']];
+function Contribute({ savedRepos }) {
+  const [sub, setSub] = useState('issues');
+  const body = { issues: h(IssueFinder), score: h(RepoScore), check: h(Checklist), track: h(Tracker), watch: h(Watchlist, { savedRepos }), prof: h(ContribProfile) }[sub];
+  return h('div', { className: 'tab' },
+    h('div', { className: 'tabs' }, SUBS.map(([k, l]) => h('button', { key: k, type: 'button', className: sub === k ? 'on' : '', onClick: () => setSub(k) }, l))), body);
+}
+
+// Root component: tabs, saved items, shareable links
+function App() {
+  const [name, setName] = useState(''), [tab, setTab] = useState('card');
+  const [state, setState] = useState({ status: 'idle' }), [init, setInit] = useState(null);
+  const [repos, setRepos] = useState(() => store.get('bc_repos', []));
+  const [people, setPeople] = useState(() => store.get('bc_people', []));
+
+  const flip = (list, set, key, item, id) => {
+    const next = list.some(x => x[id] === item[id]) ? list.filter(x => x[id] !== item[id]) : [item, ...list];
+    set(next); store.set(key, next);
+  };
+  const toggleRepo = r => flip(repos, setRepos, 'bc_repos', { id: r.id, full_name: r.full_name, html_url: r.html_url, description: r.description, stargazers_count: r.stargazers_count, language: r.language, pushed_at: r.pushed_at }, 'id');
+  const togglePerson = p => flip(people, setPeople, 'bc_people', p, 'login');
+
+  async function load(raw) {
+    const u = (raw || '').trim().replace(/^@/, '');
+    if (!u) return;
+    setName(u); setTab('card'); setState({ status: 'loading' });
+    try {
+      const data = await fetchBuilder(u);
+      setState({ status: 'ok', data });
+      location.hash = 'u=' + data.user.login;
+    } catch (err) {
+      setState({ status: 'error', msg: err.message === 'Failed to fetch' ? 'Network error. Are you online?' : err.message });
+    }
+  }
+  useEffect(() => { const m = location.hash.match(/u=([\w-]+)/); if (m) load(m[1]); }, []);
+  const goTopic = t => { setInit({ topic: t, n: Date.now() }); setTab('people'); };
+  const goLike = u => { setInit({ like: u, n: Date.now() }); setTab('people'); };
+  const show = t => ({ style: { display: tab === t ? 'block' : 'none' } });
+  const tabs = [['card', 'Card'], ['repos', 'Repo Radar'], ['people', 'Find People'], ['contrib', 'Contribute'], ['saved', 'Saved (' + (repos.length + people.length) + ')']];
+
+  return h('div', { className: 'wrap' },
+    h('h1', null, 'Builder', h('br'), h('span', null, 'Card')),
+    h('p', { className: 'sub' }, 'Type a GitHub handle. Get a collectible card. Then go find cool repos and cool people.'),
+    h('div', { className: 'tabs' }, tabs.map(([k, l]) => h('button', { key: k, type: 'button', className: tab === k ? 'on' : '', onClick: () => setTab(k) }, l))),
+    h('div', show('card'),
+      h('form', { onSubmit: e => { e.preventDefault(); load(name); } },
+        h('div', { className: 'at' }, '@'),
+        h('input', { value: name, onChange: e => setName(e.target.value), placeholder: 'torvalds', autoFocus: true, 'aria-label': 'GitHub username' }),
+        h('button', { type: 'submit' }, state.status === 'loading' ? '…' : 'Deal')),
+      state.status === 'error' && h('div', { className: 'err' }, '✖ ' + state.msg),
+      state.status === 'ok' && h(Card, { key: state.data.user.login, data: state.data, onTopic: goTopic, onLike: goLike, savedPeople: people, togglePerson })),
+    h('div', show('repos'), h(ReposTab, { savedRepos: repos, toggleRepo })),
+    h('div', show('people'), h(PeopleTab, { init, open: load, savedPeople: people, togglePerson })),
+    h('div', show('contrib'), h(Contribute, { savedRepos: repos })),
+    h('div', show('saved'), h(SavedTab, { repos, people, toggleRepo, togglePerson, open: load })),
+    h('div', { className: 'foot' }, 'Data: public GitHub API · saved items live in this browser · ',
+      h('a', { href: '#', onClick: e => { e.preventDefault(); const t = prompt('Optional GitHub token for higher rate limits (stored only in this browser):', store.get('bc_token', '')); if (t !== null) store.set('bc_token', t.trim()); } }, 'add token')));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+
 </script>
 </body>
 </html>
